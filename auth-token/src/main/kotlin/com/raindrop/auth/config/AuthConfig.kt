@@ -12,7 +12,7 @@ class AuthConfig : WebMvcConfigurer {
      * 添加拦截器
      */
     override fun addInterceptors(registry: InterceptorRegistry) {
-        var excludePath = listOf("/auth/login")
+        var excludePath = listOf("/auth/login", "/auth/guest", "/auth/refresh")
         registry.addInterceptor(AuthInterceptor()).excludePathPatterns(excludePath)
     }
 

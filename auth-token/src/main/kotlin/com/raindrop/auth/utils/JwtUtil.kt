@@ -44,7 +44,7 @@ open class JwtUtil {
          * @param token 令牌
          * @return claim
          */
-        fun parse(token: String): MutableMap<String, Claim>? {
+        private fun parse(token: String): MutableMap<String, Claim>? {
             return JWT.decode(token).claims
         }
 
@@ -70,6 +70,26 @@ open class JwtUtil {
          * @return 用户名
          */
         fun getUserName(token: String) = JWT.decode(token).getClaim("username").asString()
+
+        /**
+         * 刷新token
+         *
+         * @param token 原token
+         * @return 新token
+         */
+        fun refresh(token: String): String {
+            var createDate = Date()
+            var expireDate = Date(System.currentTimeMillis() + expireTime)
+
+            var username = parse(token)!!["sub"]!!.asString()
+            var header = mapOf("username" to username)
+            return JWT.create()
+                    .withHeader(header)
+                    .withSubject(username)
+                    .withIssuedAt(createDate)
+                    .withExpiresAt(expireDate)
+                    .sign(Algorithm.HMAC512(secret))
+        }
 
     }
 

@@ -65,4 +65,14 @@ class AuthController {
         return buildResultEntity { data = users }
     }
 
+    @PostMapping("/refresh")
+    fun refreshToken(token: String): String = if (JwtUtil.verifyToken(token)) JwtUtil.refresh(token) else "Token Invalid"
+
+    @GetMapping("/guest")
+    fun getGuestMessage(): ResultEntity {
+        return buildResultEntity {
+            data = "Hello Guest, You are handsome!"
+        }
+    }
+
 }
